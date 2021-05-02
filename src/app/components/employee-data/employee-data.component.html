@@ -1,0 +1,125 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    {{ mode === "Edit" ? "Edit employee" : "Hire employee" }}
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="cancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="formGroupData">
+    <div class="form-group">
+      <b><label for="name">Name*</label></b>
+      <div>
+        <input
+          id="name"
+          class="form-control"
+          placeholder="Name"
+          formControlName="name"
+          autocomplete="off"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            formGroupData.get('name').errors && formGroupData.get('name').dirty
+          "
+        >
+          <p>Field is mandatory</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <b><label for="surname">Surname*</label> </b>
+      <div *ngIf="mode === 'Edit'">
+        {{ employee?.surname }}
+      </div>
+      <div *ngIf="mode !== 'Edit'">
+        <input
+          id="surname"
+          class="form-control"
+          placeholder="Surname"
+          formControlName="surname"
+          autocomplete="off"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            formGroupData.get('surname').errors &&
+            formGroupData.get('surname').dirty
+          "
+        >
+          <p>Field is mandatory</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <b><label for="work-position">Work position*</label></b>
+      <div>
+        <select class="form-control" formControlName="workPosition">
+          <option value="" [selected]="!employee?.workPosition" disabled>
+            Select an option
+          </option>
+          <option
+            *ngFor="let position of positions"
+            [selected]="position === employee?.workPosition"
+          >
+            {{ position }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            formGroupData.get('workPosition').errors &&
+            formGroupData.get('workPosition').dirty
+          "
+        >
+          <p>Field is mandatory</p>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <b><label for="dateOfBirth">Date of birth*</label></b>
+      <div *ngIf="mode === 'Edit'">
+        {{ employee?.birthDate }}
+      </div>
+      <div *ngIf="mode !== 'Edit'">
+        <ngb-datepicker formControlName="birthDate" #d></ngb-datepicker>
+        <!-- <input type="date" class="form-control" formControlName="birthDate" autocomplete="off"/> -->
+        <div
+          class="text-danger"
+          *ngIf="
+            formGroupData.get('birthDate').errors &&
+            formGroupData.get('birthDate').dirty
+          "
+        >
+          <p>Field is mandatory</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    mdbBtn
+    color="danger"
+    rounded="true"
+    size="sm"
+    class="my-0"
+    (click)="cancel()"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    mdbBtn
+    color="teal"
+    rounded="true"
+    size="sm"
+    class="my-0"
+    (click)="saveEmployee()"
+    [disabled]="!formGroupData.valid"
+  >
+    Save
+  </button>
+</div>
