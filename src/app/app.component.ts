@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
     this.fireStoreService.getEmployees().subscribe(data => {
       this.employeesList = [];
       data.forEach(d => {
-        console.log(d.payload.doc.data())
         const employee: any = d.payload.doc.data();
         employee['id'] = d.payload.doc.id;
         this.employeesList.push(employee);

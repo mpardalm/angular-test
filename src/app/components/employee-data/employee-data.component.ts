@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Employee } from 'src/app/models/Employee';
@@ -42,22 +42,30 @@ export class EmployeeDataComponent implements OnInit {
       name: [this.employee?.name ?? '', [Validators.required]],
       surname: [this.employee?.surname ?? '', [Validators.required]],
       workPosition: [this.employee?.workPosition ?? '', [Validators.required]],
-      birthDate: [this.employee?.birthDate ?? '', [Validators.required]],
+      birthDate: [this.employee?.birthDate ?? '', [Validators.required, , this.validateMaxDate]],
     });
   }
 
+  validateMaxDate(control: AbstractControl) {
+    const date = new Date().toLocaleDateString().split('/');
+    const maxDateValid = `${date[2]}-${date[1]}-${date[0]}`;
+    return control.value > maxDateValid ? { notValidDate: true } : null;
+  }
+
   saveEmployee() {
-    const birthDateForm = this.formGroupData.controls.birthDate.value;
-    const birthDate = this.employee?.birthDate ?? `${birthDateForm.day}-${birthDateForm.month}-${birthDateForm.year}`;
-    const employee = {
-      id: this.employee?.id ?? undefined,
-      name: this.formGroupData.controls.name.value,
-      surname: this.formGroupData.controls.surname.value,
-      workPosition: this.formGroupData.controls.workPosition.value,
-      birthDate
-    };
-    this.event.emit(employee);
-    this.bsModalRef.hide();
+    if (this.formGroupData.controls.birthDate.value > this.maxDate()) {
+      this.formGroupData.invalid;
+    } else {
+      const employee = {
+        id: this.employee?.id ?? undefined,
+        name: this.formGroupData.controls.name.value,
+        surname: this.formGroupData.controls.surname.value,
+        workPosition: this.formGroupData.controls.workPosition.value,
+        birthDate: this.formGroupData.controls.birthDate.value
+      };
+      this.event.emit(employee);
+      this.bsModalRef.hide();
+    }
   }
 
   cancel() {
@@ -73,5 +81,10 @@ export class EmployeeDataComponent implements OnInit {
         this.bsModalRef.hide();
       }
     });
+  }
+
+  maxDate() {
+    const date = new Date().toLocaleDateString().split('/');
+    return `${date[2]}-${date[1]}-${date[0]}`;
   }
 }

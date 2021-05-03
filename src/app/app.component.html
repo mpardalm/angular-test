@@ -20,7 +20,15 @@
           </div>
         </div>
       </div>
+      <div *ngIf="!employeesList.length">
+        <h3
+          class="text-center font-weight-bold text-uppercase py-4"
+        >
+          Empty list
+        </h3>
+      </div>
       <table
+        *ngIf="employeesList.length"
         class="table table-responsive-md text-center"
       >
         <tr>
@@ -53,8 +61,10 @@
               size="sm"
               class="my-0"
               (click)="openModalEmployee('Edit', employee)"
-            >
+            ><span>
               Edit
+              <mdb-icon fas icon="edit"></mdb-icon>
+            </span>
             </button>
           </td>
           <td>
@@ -66,8 +76,10 @@
               size="sm"
               class="my-0"
               (click)="removeEmployee(employee.id)"
-            >
+            ><span>
               Remove
+              <mdb-icon fas icon="trash"></mdb-icon>
+            </span>
             </button>
           </td>
         </tr>

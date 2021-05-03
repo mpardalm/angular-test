@@ -83,8 +83,8 @@
         {{ employee?.birthDate }}
       </div>
       <div *ngIf="mode !== 'Edit'">
-        <ngb-datepicker formControlName="birthDate" #d></ngb-datepicker>
-        <!-- <input type="date" class="form-control" formControlName="birthDate" autocomplete="off"/> -->
+        <!-- <ngb-datepicker formControlName="birthDate" #d></ngb-datepicker> -->
+        <input type="date" [max]="maxDate()" class="form-control" formControlName="birthDate" autocomplete="off"/>
         <div
           class="text-danger"
           *ngIf="
@@ -92,7 +92,7 @@
             formGroupData.get('birthDate').dirty
           "
         >
-          <p>Field is mandatory</p>
+          <p>{{ formGroupData.get('birthDate').errors?.required ? 'Field is mandatory' : 'Invalid date'}}</p>
         </div>
       </div>
     </div>
