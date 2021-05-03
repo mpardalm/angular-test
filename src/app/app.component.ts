@@ -69,11 +69,11 @@ export class AppComponent implements OnInit {
   }
 
   updateEmployee(employeeResponse: Employee) {
-    this.fireStoreService.updateEmployee(employeeResponse);
+    this.fireStoreService.updateEmployee(employeeResponse).catch((err) => {});
   }
 
   createNewEmployee(employee: Employee) {
-    this.fireStoreService.createEmployee(employee);
+    this.fireStoreService.createEmployee(employee).catch((err) => {});
   }
 
   removeEmployee(id: string) {
@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
       showCancelButton: true,
     }).then((value) => {
       if (value.isConfirmed) {
-        this.fireStoreService.deleteEmployee(id);
+        this.fireStoreService.deleteEmployee(id).catch((err) => {});;
       }
     });
   }
